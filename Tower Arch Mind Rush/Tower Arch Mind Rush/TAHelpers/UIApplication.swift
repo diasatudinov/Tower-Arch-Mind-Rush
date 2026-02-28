@@ -1,8 +1,13 @@
+//
+//  UIApplication.swift
+//  Tower Arch Mind Rush
+//
+//
+
+
 import UIKit
 import SwiftUI
-struct UIApplication {
 
-}
 extension UIApplication {
     func hideKeyboard() {
         sendAction(#selector(UIResponder.resignFirstResponder),

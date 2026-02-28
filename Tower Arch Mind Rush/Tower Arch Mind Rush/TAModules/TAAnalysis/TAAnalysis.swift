@@ -1,26 +1,17 @@
 //
-//  WWAnime.swift
+//  TAAnalysis.swift
 //  Tower Arch Mind Rush
 //
-//  Created by Dias Atudinov on 28.02.2026.
 //
 
+import SwiftUI
 
-struct WWAnime: Codable, Hashable, Identifiable {
+struct TAAnalysis: Codable, Hashable, Identifiable {
     let id = UUID()
-    var title: String
-    var year: String
-    var seasons: Int
-    var totalEpisodes: Int
-    var episodeDuration: Int
-    var status: ObjectStatus
-    var currentEpisode: Int
-    var rating: Int
-    var note: String
-    
-    var totalTime: Int {
-        return totalEpisodes * episodeDuration
-    }
+    var name: String
+    var questions: [Question]
+    var rate: Int
+    var description: String
     
     var imageData: Data?
     
@@ -34,4 +25,10 @@ struct WWAnime: Codable, Hashable, Identifiable {
         }
     }
     
+}
+
+struct Question: Codable, Hashable, Identifiable {
+    let id = UUID()
+    var question: String
+    var answer: String
 }

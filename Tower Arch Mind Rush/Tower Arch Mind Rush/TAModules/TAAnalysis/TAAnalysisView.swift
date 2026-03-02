@@ -27,16 +27,40 @@ struct TAAnalysisView: View {
             ScrollView(showsIndicators: false) {
                 LazyVGrid(columns: columns, spacing: 20) {
                     ForEach(viewModel.analysis, id: \.id) { analysis in
-                        TAAnalysisCellView(analysis: analysis)
-                        
+                        NavigationLink {
+                            TAAnalysisDetailsView(viewModel: viewModel, analysis: analysis)
+                                .navigationBarBackButtonHidden()
+                        } label: {
+                            TAAnalysisCellView(analysis: analysis)
+                        }
                     }
                 }
                 .padding(.horizontal, 35)
                 .padding(.top, 50)
                 .padding(.bottom, 150)
+                
+            }
+            .overlay(alignment: .bottomTrailing) {
+                NavigationLink {
+                    TANewAnalysisView(viewModel: viewModel)
+                        .navigationBarBackButtonHidden()
+                } label: {
+                    Circle()
+                        .foregroundStyle(.white)
+                        .overlay(content: {
+                            Image(systemName: "plus")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 20)
+                                .bold()
+                                .foregroundStyle(.black)
+                        })
+                        .frame(height: 50)
+                }
+                .padding(.horizontal, 25)
+                .padding(.bottom, 150)
             }
         }
-        
         .background(Gradients.bg.color)
     }
 }

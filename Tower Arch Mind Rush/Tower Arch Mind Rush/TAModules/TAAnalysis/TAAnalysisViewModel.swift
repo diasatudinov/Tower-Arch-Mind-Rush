@@ -23,51 +23,10 @@ class TAAnalysisViewModel: ObservableObject {
             ],
             rate: 9,
             description: ""),
-        TAAnalysis(
-            name: "Guggenheim",
-            questions: [
-                Question(question: "", answer: "")
-            ],
-            rate: 9,
-            description: ""),
-        TAAnalysis(
-            name: "Guggenheim",
-            questions: [
-                Question(question: "", answer: "")
-            ],
-            rate: 9,
-            description: ""),
-        TAAnalysis(
-            name: "Guggenheim",
-            questions: [
-                Question(question: "", answer: "")
-            ],
-            rate: 9,
-            description: ""),
-        TAAnalysis(
-            name: "Guggenheim",
-            questions: [
-                Question(question: "", answer: "")
-            ],
-            rate: 9,
-            description: ""),
-        TAAnalysis(
-            name: "Guggenheim",
-            questions: [
-                Question(question: "", answer: "")
-            ],
-            rate: 9,
-            description: ""),
-        TAAnalysis(
-            name: "Guggenheim",
-            questions: [
-                Question(question: "", answer: "")
-            ],
-            rate: 9,
-            description: "")
+       
     ] {
         didSet {
-           // saveAnalysis()
+            saveAnalysis()
         }
     }
     
@@ -87,12 +46,12 @@ class TAAnalysisViewModel: ObservableObject {
     
     private var analysisFileURL: URL {
         let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        return dir.appendingPathComponent("analysis.json")
+        return dir.appendingPathComponent("analysisTest.json")
     }
     
     // MARK: – Init
     init() {
-       // loadAnalysis()
+        loadAnalysis()
         loadIdeas()
     }
     

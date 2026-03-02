@@ -24,48 +24,45 @@ struct TAMenuView: View {
     private let tabs = ["My dives", "Calendar"]
     
     var body: some View {
-        ZStack {
+        ZStack(alignment: .bottom) {
             
-            switch selectedTab {
-            case 0:
+            TabView(selection: $selectedTab) {
                 TAAnalysisView(viewModel: viewModel)
-            case 1:
+                    .tag(0)
+                
                 Color.blue
-            default:
-                Text("default")
+                    .tag(1)
             }
-            VStack {
-                Spacer()
-                
-                HStack(spacing: 0) {
-                    ForEach(0..<tabs.count) { index in
-                        Button(action: {
-                            selectedTab = index
-                        }) {
-                            VStack {
-                                Text(text(for: index))
-                                    .font(.system(size: 16, weight: .bold))
-                                    .foregroundStyle(selectedTab == index ? .black : .white)
-                            }
-                            .frame(maxWidth: .infinity, alignment: index == 0 ? .leading : .trailing)
-                            .padding(.vertical, 44)
-                            .padding(.horizontal, 33)
-                            .background(selectedTab == index ? Gradients.orange.color : Gradients.clear.color)
-                            .clipShape(RoundedRectangle(cornerRadius: 26))
-                        }
-                        
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .background(Gradients.blue.color)
-                .clipShape(RoundedRectangle(cornerRadius: 26))
-                .padding(.bottom, 5)
-                
-            }
-            .ignoresSafeArea()
+            // если не хочешь системный таббар:
+            .tabViewStyle(.page(indexDisplayMode: .never))
             
-            
+            customTabBar
         }
+        .background(Gradients.bg.color)
+        .ignoresSafeArea()
+    }
+    
+    private var customTabBar: some View {
+        HStack(spacing: 0) {
+            ForEach(0..<tabs.count, id: \.self) { index in
+                Button {
+                    selectedTab = index
+                } label: {
+                    Text(tabs[index])
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundStyle(selectedTab == index ? .black : .white)
+                        .frame(maxWidth: .infinity, alignment: index == 0 ? .leading : .trailing)
+                        .padding(.vertical, 44)
+                        .padding(.horizontal, 33)
+                        .background(selectedTab == index ? Gradients.orange.color : Gradients.clear.color)
+                        .clipShape(RoundedRectangle(cornerRadius: 26))
+                }
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .background(Gradients.blue.color)
+        .clipShape(RoundedRectangle(cornerRadius: 26))
+        .padding(.bottom, 5)
     }
     
     private func icon(for index: Int) -> String {
@@ -96,5 +93,5 @@ struct TAMenuView: View {
 }
 
 #Preview {
-    TAMenuView()
+    BBMenuContainer()
 }

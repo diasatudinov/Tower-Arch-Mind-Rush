@@ -11,11 +11,19 @@ struct TAAnalysisCellView: View {
     var body: some View {
         VStack {
             if let image = analysis.image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()  // <= растягиваем по ширине контейнера
+                    .frame(width: UIScreen.main.bounds.width / 2 - 50, height: 122)
+                    .clipped()
+                    .clipShape(RoundedRectangle(cornerRadius: 30))
+                    
                 
             } else {
                 RoundedRectangle(cornerRadius: 30)
                     .fill(Gradients.imgPlaceholder.color)
-                    .frame(height: 122)
+                    .frame(maxWidth: .infinity)
+                    .frame(width: UIScreen.main.bounds.width / 2 - 50, height: 122)
                     
             }
             
@@ -23,9 +31,11 @@ struct TAAnalysisCellView: View {
                 Text(analysis.name)
                     .font(.system(size: 16, weight: .semibold))
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundStyle(.black)
                 Text("\(analysis.rate)/10")
                     .font(.system(size: 16, weight: .semibold))
                     .frame(maxWidth: .infinity, alignment: .trailing)
+                    .foregroundStyle(.black)
             }
             .padding(.horizontal)
             .padding(.top, 10)

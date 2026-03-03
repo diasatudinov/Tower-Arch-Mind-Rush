@@ -10,7 +10,7 @@ struct TAIdea: Codable, Hashable, Identifiable {
     let id = UUID()
     var name: String
     var type: ObjectType
-    var floorNum: Int
+    var floorNum: String
     var questions: [Question]
     var description: String
     
@@ -28,9 +28,11 @@ struct TAIdea: Codable, Hashable, Identifiable {
     
 }
 
-enum ObjectType: Codable, CaseIterable {
+enum ObjectType: String, Codable, CaseIterable, Identifiable {
     case residental
     case office
+    
+    var id: String { rawValue }
     
     var text: String {
         switch self {

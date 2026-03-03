@@ -21,7 +21,7 @@ struct BBMenuContainer: View {
 struct TAMenuView: View {
     @State var selectedTab = 0
     @StateObject var viewModel = TAAnalysisViewModel()
-    private let tabs = ["My dives", "Calendar"]
+    private let tabs = ["Analysis", "Ideas"]
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -30,10 +30,9 @@ struct TAMenuView: View {
                 TAAnalysisView(viewModel: viewModel)
                     .tag(0)
                 
-                Color.blue
+                TAIdeasView(viewModel: viewModel)
                     .tag(1)
             }
-            // если не хочешь системный таббар:
             .tabViewStyle(.page(indexDisplayMode: .never))
             
             customTabBar
@@ -63,32 +62,6 @@ struct TAMenuView: View {
         .background(Gradients.blue.color)
         .clipShape(RoundedRectangle(cornerRadius: 26))
         .padding(.bottom, 5)
-    }
-    
-    private func icon(for index: Int) -> String {
-        switch index {
-        case 0: return "tab1Icon"
-        case 1: return "tab2Icon"
-        case 2: return "tab3Icon"
-        default: return ""
-        }
-    }
-    
-    private func selectedIcon(for index: Int) -> String {
-        switch index {
-        case 0: return "tab1IconSelected"
-        case 1: return "tab2IconSelected"
-        case 2: return "tab3IconSelected"
-        default: return ""
-        }
-    }
-    
-    private func text(for index: Int) -> String {
-        switch index {
-        case 0: return "Analysis"
-        case 1: return "Ideas"
-        default: return ""
-        }
     }
 }
 

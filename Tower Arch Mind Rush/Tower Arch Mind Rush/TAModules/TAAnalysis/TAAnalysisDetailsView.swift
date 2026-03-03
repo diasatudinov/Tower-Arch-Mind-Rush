@@ -47,8 +47,9 @@ struct TAAnalysisDetailsView: View {
                                 .font(.system(size: 32, weight: .semibold))
                                 .foregroundStyle(.black)
                                 .fixedSize(horizontal: false, vertical: true)
-                            Button {
-                                
+                            NavigationLink {
+                                TAEditAnalysisView(viewModel: viewModel, analysis: analysis)
+                                    .navigationBarBackButtonHidden()
                             } label: {
                                 Text("Edit")
                                     .font(.system(size: 14, weight: .semibold))

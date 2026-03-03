@@ -2,17 +2,375 @@
 //  TAEditAnalysisView.swift
 //  Tower Arch Mind Rush
 //
-//  Created by Dias Atudinov on 03.03.2026.
 //
 
 import SwiftUI
 
 struct TAEditAnalysisView: View {
+    @Environment(\.dismiss) private var dismiss
+    @ObservedObject var viewModel: TAAnalysisViewModel
+    let analysis: TAAnalysis
+    
+    @State private var selectedImage: UIImage?
+    @State private var showingImagePicker = false
+    @State private var name = ""
+    @State private var rate = 0
+    @State private var question = 0
+    @State private var answer1 = ""
+    @State private var answer2 = ""
+    @State private var answer3 = ""
+    @State private var description = ""
+    @State private var questions: [Question] = []
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            VStack {
+                if let image = selectedImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 2.5)
+                        .overlay {
+                            Text("upload a photo")
+                                .font(.system(size: 20, weight: .regular))
+                                .foregroundStyle(.white.opacity(0.5))
+                        }
+                        .onTapGesture {
+                            withAnimation {
+                                showingImagePicker = true
+                            }
+                        }
+                } else {
+                    Rectangle()
+                        .fill(Gradients.imgPlaceholder.color)
+                        .frame(height: UIScreen.main.bounds.height / 2.5)
+                        .overlay {
+                            Text("upload a photo")
+                                .font(.system(size: 20, weight: .regular))
+                                .foregroundStyle(.white.opacity(0.5))
+                        }
+                        .onTapGesture {
+                            withAnimation {
+                                showingImagePicker = true
+                            }
+                        }
+                }
+            }
+            
+            
+            VStack(alignment: .leading, spacing: 30) {
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 14) {
+                        textFiled(title: "Name") {
+                            TextField("Name", text: $name)
+                                .font(.system(size: 20, weight: .semibold))
+                                .padding(.vertical, 11).padding(.horizontal, 16)
+                                .background(.white)
+                                .clipShape(RoundedRectangle(cornerRadius: 16))
+                                .overlay(alignment: .trailing) {
+                                    Image(systemName: "pencil")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 20)
+                                        .bold()
+                                        .foregroundStyle(.pencilField)
+                                        .padding()
+                                }
+                                .overlay(content: {
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(lineWidth: 1)
+                                        .foregroundStyle(.textFieldBg)
+                                    
+                                })
+                                .padding(.horizontal, 2)
+                        }
+                    }.padding(.top, 30)
+                    
+                    
+                    VStack(alignment: .leading, spacing: 16) {
+                        
+                        HStack(spacing: 15) {
+                            
+                            Button {
+                                if question > 0 {
+                                    question -= 1
+                                }
+                            } label: {
+                                Image(systemName: "chevron.left")
+                                    .bold()
+                                    .foregroundStyle(.black)
+                            }
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("Question \(question + 1)")
+                                    .font(.system(size: 20, weight: .semibold))
+                                    .foregroundStyle(.black)
+                                
+                                switch question {
+                                case 0:
+                                    Text("How does the facade work?")
+                                        .font(.system(size: 16, weight: .regular))
+                                        .foregroundStyle(.black)
+                                case 1:
+                                    Text("Where is the dominant feature?")
+                                        .font(.system(size: 16, weight: .regular))
+                                        .foregroundStyle(.black)
+                                case 2:
+                                    Text("How does light affect volume?")
+                                        .font(.system(size: 16, weight: .regular))
+                                        .foregroundStyle(.black)
+                                default:
+                                    Text("How does the facade work?")
+                                        .font(.system(size: 16, weight: .regular))
+                                        .foregroundStyle(.black)
+                                    
+                                }
+                                
+                                switch question {
+                                case 0:
+                                    TextEditor(text: $answer1)
+                                        .font(.system(size: 14, weight: .light))
+                                        .frame(height: 120)
+                                        .foregroundStyle(.black)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .fill(.textEditorBg)
+                                        )
+                                        .scrollContentBackground(.hidden)
+                                        .overlay(alignment: .topLeading) {
+                                            if answer1.isEmpty {
+                                                Text("Enter the answer...")
+                                                    .font(.system(size: 14, weight: .light))
+                                                    .foregroundStyle(.secondary)
+                                                    .allowsHitTesting(false)
+                                                    .padding(.top, 10)
+                                                    .padding(.leading, 4)
+                                            }
+                                        }
+                                        .overlay(content: {
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .stroke(lineWidth: 1)
+                                                .foregroundStyle(.textEditorBorder)
+                                            
+                                        })
+                                case 1:
+                                    TextEditor(text: $answer2)
+                                        .font(.system(size: 14, weight: .light))
+                                        .frame(height: 120)
+                                        .foregroundStyle(.black)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .fill(.textEditorBg)
+                                        )
+                                        .scrollContentBackground(.hidden)
+                                        .overlay(alignment: .topLeading) {
+                                            if answer2.isEmpty {
+                                                Text("Enter the answer...")
+                                                    .font(.system(size: 14, weight: .light))
+                                                    .foregroundStyle(.secondary)
+                                                    .allowsHitTesting(false)
+                                                    .padding(.top, 10)
+                                                    .padding(.leading, 4)
+                                            }
+                                        }
+                                        .overlay(content: {
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .stroke(lineWidth: 1)
+                                                .foregroundStyle(.textEditorBorder)
+                                            
+                                        })
+                                    
+                                case 2:
+                                    TextEditor(text: $answer3)
+                                        .font(.system(size: 14, weight: .light))
+                                        .frame(height: 120)
+                                        .foregroundStyle(.black)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .fill(.textEditorBg)
+                                        )
+                                        .scrollContentBackground(.hidden)
+                                        .overlay(alignment: .topLeading) {
+                                            if answer3.isEmpty {
+                                                Text("Enter the answer...")
+                                                    .font(.system(size: 14, weight: .light))
+                                                    .foregroundStyle(.secondary)
+                                                    .allowsHitTesting(false)
+                                                    .padding(.top, 10)
+                                                    .padding(.leading, 4)
+                                            }
+                                        }
+                                        .overlay(content: {
+                                            RoundedRectangle(cornerRadius: 8)
+                                                .stroke(lineWidth: 1)
+                                                .foregroundStyle(.textEditorBorder)
+                                            
+                                        })
+                                default:
+                                    Text("sad")
+                                    
+                                }
+                            }
+                            
+                            Button {
+                                if question < 2 {
+                                    question += 1
+                                }
+                            } label: {
+                                Image(systemName: "chevron.right")
+                                    .bold()
+                                    .foregroundStyle(.black)
+                            }
+                        }
+                    }.frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    VStack {
+                        
+                        Text("Rate from 1 to 10")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundStyle(.black)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        HStack(spacing: 8) {
+                            ForEach(Range(0...9)) { i in
+                                Image(systemName: "star.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 25)
+                                    .foregroundStyle(rate > i ? .starYellow : .starOff)
+                                    .onTapGesture {
+                                        if self.rate == i + 1 {
+                                            self.rate = 0
+                                        } else {
+                                            self.rate = i + 1
+                                        }
+                                        
+                                    }
+                            }
+                        }
+                    }
+                    
+                    
+                    VStack(alignment: .leading, spacing: 16) {
+                        textFiled(title: "Description") {
+                            TextEditor(text: $description)
+                                .font(.system(size: 14, weight: .light))
+                                .frame(height: 120)
+                                .foregroundStyle(.black)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .fill(.textEditorBg)
+                                )
+                                .scrollContentBackground(.hidden)
+                                .overlay(alignment: .topLeading) {
+                                    if description.isEmpty {
+                                        Text("Enter a description...")
+                                            .font(.system(size: 14, weight: .light))
+                                            .foregroundStyle(.secondary)
+                                            .allowsHitTesting(false)
+                                            .padding(.top, 10)
+                                            .padding(.leading, 4)
+                                    }
+                                }
+                                .overlay(content: {
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(lineWidth: 1)
+                                        .foregroundStyle(.textEditorBorder)
+                                    
+                                })
+                        }
+                    }
+                    
+                    Button {
+                        let newAnalysis = TAAnalysis(
+                            name: name,
+                            questions: [
+                                Question(question: "How does the facade work?", answer: answer1),
+                                Question(question: "Where is the dominant feature?", answer: answer2),
+                                Question(question: "How does light affect volume?", answer: answer3)
+                            ],
+                            rate: rate,
+                            description: description,
+                            imageData: selectedImage?.pngData()
+                        )
+                        
+                        viewModel.edit(analys: analysis, newAnalys: newAnalysis)
+                        dismiss()
+                    } label: {
+                        Text("Save")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(.white)
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 35)
+                            .background(.starOff)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                    }
+                }
+            }
+            .padding(.bottom, 50)
+            .padding(.horizontal, 30)
+            .frame(maxWidth: .infinity)
+            .background(.white)
+            .clipShape(UnevenRoundedRectangle(topLeadingRadius: 30, topTrailingRadius: 30))
+            .padding(.bottom, -40)
+            .offset(y: -40)
+        }
+        .ignoresSafeArea()
+        .overlay(alignment: .topLeading) {
+            Button {
+                dismiss()
+            } label: {
+                Image(.backBtnTA)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 30)
+            }
+            .padding(.horizontal)
+        }
+        .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
+            ImagePicker(selectedImage: $selectedImage, isPresented: $showingImagePicker)
+        }
+        .onAppear {
+            fetchData()
+        }
+    }
+    
+    private func fetchData() {
+        name = analysis.name
+        selectedImage = analysis.image
+        rate = analysis.rate
+        description = analysis.description
+        answer1 = analysis.questions[0].answer
+        answer2 = analysis.questions[1].answer
+        answer3 = analysis.questions[2].answer
+    }
+    
+    func loadImage() {
+        if let selectedImage = selectedImage {
+            print("Selected image size: \(selectedImage.size)")
+        }
+    }
+    
+    @ViewBuilder func textFiled<Content: View>(
+        title: String,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 8)  {
+            Text(title)
+                .font(.system(size: 17, weight: .semibold))
+                .foregroundStyle(.black)
+            
+            content()
+        }
     }
 }
 
 #Preview {
-    TAEditAnalysisView()
+    TAEditAnalysisView(viewModel: TAAnalysisViewModel(), analysis: TAAnalysis(
+        name: "GuggenheimGuggenheim Guggenheim v Guggenheim Guggenheim",
+        questions: [
+            Question(question: "How does the facade work?", answer: "Titanium plates reflect light, creating dynamism"),
+            Question(question: "Where is the dominant feature?", answer: "The central atrium is the heart of the building"),
+            Question(question: "How does light affect volume?", answer: "Through-holes create a play of shadows"),
+        ],
+        rate: 6,
+        description: "Explore Frank Gehry's work in context, Explore Frank Gehry's work in context. Explore Frank Gehry's work in context. Explore Frank Gehry's work in context Explore Frank Gehry's work in context Explore Frank Gehry's work in context. Explore Frank Gehry's work in context Explore Frank Gehry's work in context Explore Frank Gehry's work in context . Explore Frank Gehry's work in context"))
 }

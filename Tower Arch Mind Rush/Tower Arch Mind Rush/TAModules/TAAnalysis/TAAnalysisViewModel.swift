@@ -8,31 +8,13 @@ import SwiftUI
 
 class TAAnalysisViewModel: ObservableObject {
     // MARK: – Anime
-    @Published var analysis: [TAAnalysis] = [
-        TAAnalysis(
-            name: "Guggenheim",
-            questions: [
-                Question(question: "", answer: "")
-            ],
-            rate: 9,
-            description: ""),
-        TAAnalysis(
-            name: "Guggenheim",
-            questions: [
-                Question(question: "", answer: "")
-            ],
-            rate: 9,
-            description: ""),
-       
-    ] {
+    @Published var analysis: [TAAnalysis] = [] {
         didSet {
             saveAnalysis()
         }
     }
     
-    @Published var ideas: [TAIdea] = [
-        
-    ] {
+    @Published var ideas: [TAIdea] = [] {
         didSet {
             saveIdeas()
         }
@@ -93,6 +75,15 @@ class TAAnalysisViewModel: ObservableObject {
         analysis.remove(at: index)
     }
     
+    func edit(analys: TAAnalysis, newAnalys: TAAnalysis) {
+        guard let index = analysis.firstIndex(of: analys) else { return }
+        analysis[index].image = newAnalys.image
+        analysis[index].name = newAnalys.name
+        analysis[index].questions = newAnalys.questions
+        analysis[index].rate = newAnalys.rate
+        analysis[index].description = newAnalys.description
+    }
+    
     // MARK: – Save / Load Ideas
     
     private func saveIdeas() {
@@ -128,6 +119,16 @@ class TAAnalysisViewModel: ObservableObject {
     func delete(idea: TAIdea) {
         guard let index = ideas.firstIndex(of: idea) else { return }
         ideas.remove(at: index)
+    }
+    
+    func edit(idea: TAIdea, newIdea: TAIdea) {
+        guard let index = ideas.firstIndex(of: idea) else { return }
+        ideas[index].image = newIdea.image
+        ideas[index].name = newIdea.name
+        ideas[index].type = newIdea.type
+        ideas[index].floorNum = newIdea.floorNum
+        ideas[index].questions = newIdea.questions
+        ideas[index].description = newIdea.description
     }
 }
 
